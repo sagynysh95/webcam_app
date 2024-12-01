@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+      - minio
+    volumes:
+      - .:/app
+    devices:
+      - /dev/video0:/dev/video0
+    privileged: true
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 50M
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+#    ports:
+#      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      MINIO_ROOT_USER: "sagynysh1"
+      MINIO_ROOT_PASSWORD: "sagynysh1"
+    command: server /data --console-address ":9090"
+
+#  minio:
+#    image: minio/minio:latest
+#    volumes:
+#      - minio_data:/data1
+#    expose:
+#      - "9000"
+#    environment:
+#      MINIO_ROOT_USER: "clevtech"
+#      MINIO_ROOT_PASSWORD: "clevtech"
+#    command: server http://minio1/data1
+
+
+#  minio:
+#    image: minio/minio:latest
+#    container_name: minio
+#    ports:
+#      - "9000:9000"
+#      - "9001:9001"
+#    environment:
+#      MINIO_ROOT_USER: "clevtech"
+#      MINIO_ROOT_PASSWORD: "clevtech"
+#    volumes:
+#      - minio_data:/data
+#    command: server /data --console-address ":9001"
+
+volumes:
+  mongo_data:
+  minio_data:
+
