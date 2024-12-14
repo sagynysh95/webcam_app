@@ -19,7 +19,7 @@ minio_client = Minio("play.min.io",
                      )
 
 
-def upload_to_minio(image, file_name, b_name='bucket-faces-sagynysh'):
+def upload_to_minio(image, file_name, b_name='bucket-faces-sagynysh1'):
     try:
         if not minio_client.bucket_exists(b_name):
             minio_client.make_bucket(b_name)
